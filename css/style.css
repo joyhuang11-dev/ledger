@@ -388,7 +388,7 @@ body {
   margin-right: 4px;
 }
 
-.amount-input {
+#amount-display {
   font-size: 58px;
   font-weight: 800;
   border: none;
