@@ -24,15 +24,16 @@ function uid() {
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { transactions: [], categories: DEFAULT_CATEGORIES, settings: { currency: 'NT$' } };
+    if (!raw) return { transactions: [], categories: DEFAULT_CATEGORIES, settings: { currencyCode: 'TWD' } };
     const parsed = JSON.parse(raw);
     if (!parsed.categories || parsed.categories.length === 0) parsed.categories = DEFAULT_CATEGORIES;
-    if (!parsed.settings) parsed.settings = { currency: 'NT$' };
+    if (!parsed.settings) parsed.settings = {};
+    if (!parsed.settings.currencyCode) parsed.settings.currencyCode = 'TWD';
     if (!parsed.transactions) parsed.transactions = [];
     return parsed;
   } catch (e) {
     console.error('讀取資料失敗', e);
-    return { transactions: [], categories: DEFAULT_CATEGORIES, settings: { currency: 'NT$' } };
+    return { transactions: [], categories: DEFAULT_CATEGORIES, settings: { currencyCode: 'TWD' } };
   }
 }
 
@@ -126,7 +127,7 @@ const Store = {
   },
 
   clearAll() {
-    this.state = { transactions: [], categories: DEFAULT_CATEGORIES, settings: { currency: 'NT$' } };
+    this.state = { transactions: [], categories: DEFAULT_CATEGORIES, settings: { currencyCode: 'TWD' } };
     this.save();
   },
 };

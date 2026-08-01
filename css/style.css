@@ -448,7 +448,7 @@ body {
   gap: 8px;
 }
 
-input[type="text"], input[type="date"], textarea {
+input[type="text"], input[type="date"], select, textarea {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;

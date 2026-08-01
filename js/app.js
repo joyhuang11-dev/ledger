@@ -17,9 +17,52 @@ const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 // ---- 小工具 ----
 function pad2(n) { return String(n).padStart(2, '0'); }
 function todayStr() { const d = new Date(); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+const CURRENCIES = [
+  { code: 'TWD', symbol: 'NT$', decimals: 0, label: '新台幣' },
+  { code: 'USD', symbol: 'US$', decimals: 2, label: '美元' },
+  { code: 'JPY', symbol: '¥', decimals: 0, label: '日圓' },
+  { code: 'EUR', symbol: '€', decimals: 2, label: '歐元' },
+  { code: 'CNY', symbol: 'CN¥', decimals: 2, label: '人民幣' },
+  { code: 'HKD', symbol: 'HK$', decimals: 2, label: '港幣' },
+  { code: 'GBP', symbol: '£', decimals: 2, label: '英鎊' },
+  { code: 'KRW', symbol: '₩', decimals: 0, label: '韓元' },
+  { code: 'AUD', symbol: 'A$', decimals: 2, label: '澳幣' },
+];
+function getCurrencyInfo(code) { return CURRENCIES.find((c) => c.code === code) || CURRENCIES[0]; }
+
+// 所有交易金額都以台幣(TWD)儲存；顯示幣別若非台幣，用快取的匯率換算成參考金額
 function fmtMoney(n) {
-  const cur = Store.getSettings().currency || 'NT$';
-  return `${cur} ${Math.round(n).toLocaleString('zh-Hant')}`;
+  const settings = Store.getSettings();
+  const code = settings.currencyCode || 'TWD';
+  const info = getCurrencyInfo(code);
+  let amount = n;
+  if (code !== 'TWD' && settings.rateCache && settings.rateCache.code === code && settings.rateCache.rate) {
+    amount = n / settings.rateCache.rate;
+  }
+  const decimals = info.decimals;
+  const rounded = decimals === 0 ? Math.round(amount) : Math.round(amount * 100) / 100;
+  return `${info.symbol} ${rounded.toLocaleString('zh-Hant', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
+}
+
+async function fetchExchangeRate(code) {
+  const res = await fetch(`https://open.er-api.com/v6/latest/${code}`);
+  if (!res.ok) throw new Error('exchange rate request failed');
+  const data = await res.json();
+  const rate = data.rates && data.rates.TWD;
+  if (!rate) throw new Error('no TWD rate in response');
+  return { code, rate, fetchedAt: todayStr() };
+}
+
+async function ensureRateFresh(code) {
+  if (code === 'TWD') return;
+  const cache = Store.getSettings().rateCache;
+  if (cache && cache.code === code && cache.fetchedAt === todayStr()) return;
+  try {
+    const result = await fetchExchangeRate(code);
+    Store.updateSettings({ rateCache: result });
+  } catch (e) {
+    console.error('匯率更新失敗', e);
+  }
 }
 function monthLabel(y, m) { return `${y} 年 ${m + 1} 月`; }
 function isSameMonth(dateStr, y, m) {
@@ -239,6 +282,17 @@ function renderStats() {
 function renderSettings() {
   const expCats = Store.getCategories('expense');
   const incCats = Store.getCategories('income');
+  const settings = Store.getSettings();
+  const currentCode = settings.currencyCode || 'TWD';
+  const rateInfoHTML = (() => {
+    if (currentCode === 'TWD') return '所有金額都以台幣儲存，無需換算。';
+    const cache = settings.rateCache;
+    if (cache && cache.code === currentCode) {
+      const fresh = cache.fetchedAt === todayStr();
+      return `參考匯率：1 ${currentCode} ≈ ${cache.rate.toFixed(3)} TWD（${cache.fetchedAt} 資料${fresh ? '' : '，非當日最新，稍後會自動更新'}）`;
+    }
+    return '正在取得匯率中...若失敗將暫以台幣顯示。';
+  })();
 
   els.view.innerHTML = `
     <div class="card">
@@ -256,8 +310,11 @@ function renderSettings() {
       </div>
     </div>
     <div class="card">
-      <div class="section-title">幣別符號</div>
-      <input type="text" id="currency-input" maxlength="5" value="${Store.getSettings().currency || 'NT$'}" />
+      <div class="section-title">顯示幣別</div>
+      <select id="currency-select">
+        ${CURRENCIES.map((c) => `<option value="${c.code}" ${c.code === currentCode ? 'selected' : ''}>${c.symbol} ${c.label} (${c.code})</option>`).join('')}
+      </select>
+      <div id="rate-info" style="margin-top:10px; font-size:13px; color:var(--text-muted);">${rateInfoHTML}</div>
     </div>
     <div class="card">
       <div class="section-title">資料管理</div>
@@ -282,9 +339,14 @@ function renderSettings() {
   document.getElementById('add-exp-cat').onclick = () => openCategorySheet('expense');
   document.getElementById('add-inc-cat').onclick = () => openCategorySheet('income');
 
-  document.getElementById('currency-input').addEventListener('change', (e) => {
-    Store.updateSettings({ currency: e.target.value || 'NT$' });
-    toast('已更新幣別符號');
+  document.getElementById('currency-select').addEventListener('change', async (e) => {
+    const code = e.target.value;
+    Store.updateSettings({ currencyCode: code });
+    renderSettings();
+    if (code !== 'TWD') {
+      await ensureRateFresh(code);
+      renderSettings();
+    }
   });
 
   document.getElementById('export-btn').onclick = () => {
@@ -463,12 +525,10 @@ function openAddSheet(existingTx) {
     };
     if (editing) {
       document.getElementById('delete-tx').onclick = () => {
-        openConfirmSheet('刪除這筆紀錄？', '刪除後將無法復原。', () => {
-          Store.deleteTransaction(existingTx.id);
-          overlay.remove();
-          toast('已刪除紀錄');
-          render();
-        });
+        Store.deleteTransaction(existingTx.id);
+        overlay.remove();
+        toast('已刪除紀錄');
+        render();
       };
     }
   }
@@ -498,10 +558,16 @@ function initNav() {
   document.getElementById('fab-add').addEventListener('click', () => openAddSheet(null));
 }
 
-function init() {
+async function init() {
   initNav();
   initTheme();
   render();
+
+  const code = Store.getSettings().currencyCode;
+  if (code && code !== 'TWD') {
+    await ensureRateFresh(code);
+    render();
+  }
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
