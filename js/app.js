@@ -392,14 +392,13 @@ function openAddSheet(existingTx) {
   function draw() {
     const cats = Store.getCategories(sheetState.type);
     overlay.innerHTML = `
-      <div class="sheet">
-        <div class="sheet-header">
-          <h2>${editing ? '編輯紀錄' : '新增紀錄'}</h2>
+      <div class="sheet tx-sheet">
+        <div class="tx-top-row">
+          <div class="type-toggle">
+            <button data-type="expense" class="${sheetState.type === 'expense' ? 'active expense' : ''}">支出</button>
+            <button data-type="income" class="${sheetState.type === 'income' ? 'active income' : ''}">收入</button>
+          </div>
           <button class="icon-btn" id="close-add-sheet" style="background:var(--bg);color:var(--text)">✕</button>
-        </div>
-        <div class="type-toggle">
-          <button data-type="expense" class="${sheetState.type === 'expense' ? 'active expense' : ''}">支出</button>
-          <button data-type="income" class="${sheetState.type === 'income' ? 'active income' : ''}">收入</button>
         </div>
         <div class="amount-input-wrap">
           <span class="currency">${Store.getSettings().currency || 'NT$'}</span>
@@ -408,16 +407,15 @@ function openAddSheet(existingTx) {
         <div class="keypad" id="keypad">
           ${['1','2','3','4','5','6','7','8','9','.','0','⌫'].map((k) => `<button data-key="${k}" class="${k === '⌫' ? 'op' : ''}">${k}</button>`).join('')}
         </div>
-        <div class="field-label">分類</div>
         <div class="category-grid" id="cat-grid">
           ${cats.map((c) => `<div class="category-chip ${c.id === sheetState.categoryId ? 'selected' : ''}" data-cat="${c.id}"><span class="emoji">${c.icon}</span><span>${c.name}</span></div>`).join('')}
         </div>
-        <div class="field-label">日期</div>
-        <input type="date" id="date-input" value="${sheetState.date}" />
-        <div class="field-label">備註 (選填)</div>
-        <textarea id="note-input" placeholder="輸入備註...">${escapeHTML(sheetState.note)}</textarea>
+        <div class="tx-bottom-row">
+          <input type="date" class="pill-input" id="date-input" value="${sheetState.date}" />
+          <input type="text" class="pill-input" id="note-input" placeholder="新增備註" value="${escapeHTML(sheetState.note)}" />
+        </div>
         <button class="btn-primary" id="save-tx">${editing ? '儲存變更' : '新增紀錄'}</button>
-        ${editing ? `<button class="btn-danger" id="delete-tx">刪除此紀錄</button>` : ''}
+        ${editing ? `<button class="btn-danger-compact" id="delete-tx">刪除此紀錄</button>` : ''}
       </div>
     `;
     bindSheetEvents();

@@ -75,7 +75,7 @@ body {
 }
 
 .topbar h1 {
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 700;
   margin: 0;
 }
@@ -87,7 +87,7 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
 }
 
@@ -118,24 +118,24 @@ body {
 }
 
 .summary-item .label {
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.85;
 }
 
 .summary-item .value {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   margin-top: 2px;
 }
 
 .balance-value {
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 800;
   margin-top: 4px;
 }
 
 .section-title {
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 700;
   margin: 4px 0 10px;
   display: flex;
@@ -144,7 +144,7 @@ body {
 }
 
 .section-title .link {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--accent);
   cursor: pointer;
@@ -152,7 +152,7 @@ body {
 
 /* ---- Transaction list ---- */
 .tx-group-label {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 18px 0 6px;
   font-weight: 600;
@@ -171,14 +171,14 @@ body {
 }
 
 .tx-icon {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 12px;
   background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 21px;
   flex-shrink: 0;
 }
 
@@ -189,11 +189,11 @@ body {
 
 .tx-cat {
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 16px;
 }
 
 .tx-note {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -202,7 +202,7 @@ body {
 
 .tx-amount {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16.5px;
   flex-shrink: 0;
 }
 
@@ -213,11 +213,11 @@ body {
   text-align: center;
   color: var(--text-muted);
   padding: 60px 20px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .empty-state .big {
-  font-size: 40px;
+  font-size: 42px;
   margin-bottom: 10px;
 }
 
@@ -233,16 +233,16 @@ body {
 .month-nav button {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  font-size: 15px;
+  font-size: 16px;
   cursor: pointer;
   color: var(--text);
 }
 
 .month-nav .month-label {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   min-width: 100px;
   text-align: center;
@@ -268,7 +268,7 @@ body {
   align-items: center;
   gap: 2px;
   padding: 8px 0 6px;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-muted);
   cursor: pointer;
 }
@@ -279,7 +279,7 @@ body {
 }
 
 .nav-icon {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .fab {
@@ -339,16 +339,25 @@ body {
 }
 
 .sheet-header h2 {
-  font-size: 17px;
+  font-size: 18px;
   margin: 0;
 }
 
+/* ---- Add/edit transaction sheet: compact single-screen layout ---- */
+.tx-sheet { display: flex; flex-direction: column; gap: 8px; }
+
+.tx-top-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .type-toggle {
+  flex: 1;
   display: flex;
   background: var(--bg);
   border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 16px;
+  padding: 3px;
 }
 
 .type-toggle button {
@@ -357,8 +366,8 @@ body {
   background: none;
   padding: 10px 0;
   border-radius: 9px;
-  font-weight: 600;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 17px;
   color: var(--text-muted);
   cursor: pointer;
 }
@@ -368,19 +377,19 @@ body {
 
 .amount-input-wrap {
   text-align: center;
-  margin-bottom: 18px;
 }
 
 .amount-input-wrap .currency {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-muted);
   vertical-align: top;
   position: relative;
-  top: 10px;
+  top: 20px;
+  margin-right: 4px;
 }
 
 .amount-input {
-  font-size: 42px;
+  font-size: 58px;
   font-weight: 800;
   border: none;
   background: none;
@@ -388,37 +397,41 @@ body {
   width: 70%;
   text-align: center;
   outline: none;
+  line-height: 1;
 }
 
 .field-label {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text-muted);
   font-weight: 600;
   margin: 14px 0 8px;
 }
 
 .category-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
 }
 
 .category-chip {
+  flex: 0 0 auto;
+  width: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 10px 4px;
+  gap: 2px;
+  padding: 8px 2px;
   border-radius: 12px;
   border: 2px solid transparent;
   background: var(--bg);
   cursor: pointer;
-  font-size: 11.5px;
+  font-size: 10.5px;
   color: var(--text);
 }
 
 .category-chip .emoji {
-  font-size: 22px;
+  font-size: 19px;
 }
 
 .category-chip.selected {
@@ -430,6 +443,11 @@ body {
   color: var(--text-muted);
 }
 
+.tx-bottom-row {
+  display: flex;
+  gap: 8px;
+}
+
 input[type="text"], input[type="date"], textarea {
   width: 100%;
   padding: 12px 14px;
@@ -437,11 +455,18 @@ input[type="text"], input[type="date"], textarea {
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text);
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-family: inherit;
 }
 
 textarea { resize: none; min-height: 60px; }
+
+.pill-input {
+  flex: 1;
+  width: auto;
+  padding: 10px 12px;
+  font-size: 14px;
+}
 
 .btn-primary {
   width: 100%;
@@ -450,9 +475,9 @@ textarea { resize: none; min-height: 60px; }
   border: none;
   background: var(--accent);
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
-  margin-top: 20px;
+  margin-top: 4px;
   cursor: pointer;
 }
 
@@ -463,9 +488,21 @@ textarea { resize: none; min-height: 60px; }
   border: none;
   background: none;
   color: var(--expense);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   margin-top: 10px;
+  cursor: pointer;
+}
+
+.btn-danger-compact {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: none;
+  color: var(--expense);
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: 2px;
   cursor: pointer;
 }
 
@@ -476,7 +513,7 @@ textarea { resize: none; min-height: 60px; }
   border: 1px solid var(--border);
   background: var(--card-bg);
   color: var(--text);
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 600;
   margin-top: 10px;
   cursor: pointer;
@@ -485,14 +522,14 @@ textarea { resize: none; min-height: 60px; }
 .keypad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 10px;
+  gap: 7px;
 }
 
 .keypad button {
-  padding: 14px 0;
-  font-size: 19px;
-  font-weight: 600;
+  padding: 8px 0;
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1;
   border: none;
   border-radius: 12px;
   background: var(--bg);
@@ -512,7 +549,7 @@ textarea { resize: none; min-height: 60px; }
 }
 
 .pie-svg { width: 200px; height: 200px; }
-.empty-chart { text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 13px; }
+.empty-chart { text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 14px; }
 
 .legend {
   display: flex;
@@ -524,7 +561,7 @@ textarea { resize: none; min-height: 60px; }
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .legend-dot {
@@ -544,7 +581,7 @@ textarea { resize: none; min-height: 60px; }
   align-items: center;
   gap: 8px;
   margin-bottom: 10px;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .bar-label { color: var(--text-muted); }
@@ -568,7 +605,7 @@ textarea { resize: none; min-height: 60px; }
   display: flex;
   gap: 16px;
   justify-content: center;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   margin-top: 4px;
 }
@@ -587,7 +624,7 @@ textarea { resize: none; min-height: 60px; }
   justify-content: space-between;
   padding: 14px 4px;
   border-bottom: 1px solid var(--border);
-  font-size: 14.5px;
+  font-size: 16px;
 }
 
 .list-item:last-child { border-bottom: none; }
@@ -604,8 +641,8 @@ textarea { resize: none; min-height: 60px; }
   gap: 6px;
   background: var(--bg);
   border-radius: 20px;
-  padding: 6px 12px;
-  font-size: 13px;
+  padding: 7px 13px;
+  font-size: 14.5px;
   margin: 4px 6px 4px 0;
 }
 
@@ -630,7 +667,7 @@ textarea { resize: none; min-height: 60px; }
   color: #fff;
   padding: 10px 20px;
   border-radius: 30px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   z-index: 200;
   box-shadow: 0 4px 14px rgba(0,0,0,0.3);
   animation: fade-in-out 2s ease forwards;
