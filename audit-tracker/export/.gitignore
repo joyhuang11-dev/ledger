@@ -1,0 +1,4 @@
+node_modules/
+rows.json
+output.docx
+*.pdf
